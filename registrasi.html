@@ -1,1074 +1,577 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Registrasi - Ghost</title>
+<title>Registrasi Ghost</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
 
-        body {
-            min-height: 100vh;
-            background:
-                radial-gradient(
-                    circle at top,
-                    #123b72 0%,
-                    #071a35 45%,
-                    #030b18 100%
-                );
+body{
+    min-height:100vh;
+    font-family:Arial,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
 
-            color: white;
-            font-family: Arial, Helvetica, sans-serif;
+    color:white;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    background:
+        radial-gradient(circle at top,#123b70 0%,transparent 40%),
+        linear-gradient(145deg,#050b16,#0b1b31 55%,#07101d);
+}
 
-            padding: 20px;
-        }
+.card{
+    width:100%;
+    max-width:440px;
+    padding:30px 25px;
 
-        .container {
-            width: 100%;
-            max-width: 430px;
-        }
+    border-radius:22px;
 
-        .card {
-            background: rgba(7, 25, 50, 0.95);
-            border: 1px solid rgba(90, 160, 255, 0.25);
-            border-radius: 20px;
-            padding: 28px;
+    background:rgba(10,25,45,.94);
 
-            box-shadow:
-                0 15px 45px rgba(0, 0, 0, 0.45);
-        }
+    border:1px solid rgba(80,150,255,.25);
 
-        .logo {
-            display: block;
+    box-shadow:0 20px 60px rgba(0,0,0,.45);
+}
 
-            width: 110px;
-            height: 110px;
+.logo{
+    display:block;
 
-            object-fit: contain;
+    width:90px;
+    height:90px;
 
-            margin: 0 auto 18px;
+    object-fit:contain;
 
-            border-radius: 18px;
-        }
+    border-radius:16px;
 
-        h1 {
-            text-align: center;
+    margin:0 auto 18px;
+}
 
-            font-size: 25px;
+h1{
+    text-align:center;
+    font-size:27px;
+    margin-bottom:8px;
+}
 
-            margin-bottom: 8px;
-        }
+.subtitle{
+    text-align:center;
+    color:#9eacc0;
+    font-size:14px;
+    margin-bottom:25px;
+}
 
-        .subtitle {
-            text-align: center;
+.discord-box{
+    padding:15px;
 
-            color: #9fb6d3;
+    border-radius:14px;
 
-            font-size: 14px;
+    background:#101f35;
 
-            line-height: 1.5;
+    border:1px solid rgba(80,150,255,.2);
 
-            margin-bottom: 25px;
-        }
+    margin-bottom:20px;
+}
 
-        .loading {
-            text-align: center;
+.discord-name{
+    font-weight:bold;
+    margin-bottom:5px;
+}
 
-            color: #9fb6d3;
+.discord-id{
+    color:#8293aa;
+    font-size:12px;
+    word-break:break-all;
+}
 
-            font-size: 14px;
+label{
+    display:block;
 
-            padding: 15px 0;
-        }
+    font-size:14px;
+    font-weight:bold;
 
-        .hidden {
-            display: none !important;
-        }
+    margin-bottom:7px;
 
-        /* ================================
-           DISCORD ACCOUNT
-        ================================= */
+    color:#cbd7e8;
+}
 
-        .discord-box {
-            background: rgba(88, 101, 242, 0.12);
+input{
+    width:100%;
 
-            border: 1px solid rgba(88, 101, 242, 0.35);
+    padding:14px;
 
-            border-radius: 14px;
+    border-radius:11px;
 
-            padding: 14px;
+    border:1px solid #263e5e;
 
-            margin-bottom: 14px;
-        }
+    outline:none;
 
-        .discord-title {
-            color: #aeb8ff;
+    color:white;
 
-            font-size: 12px;
+    background:#071424;
 
-            margin-bottom: 6px;
-        }
+    margin-bottom:17px;
 
-        .discord-user {
-            font-size: 15px;
+    font-size:15px;
+}
 
-            font-weight: bold;
+input:focus{
+    border-color:#4c8dff;
+}
 
-            word-break: break-word;
-        }
+button{
+    width:100%;
 
-        /* ================================
-           BUTTON
-        ================================= */
+    border:0;
 
-        button {
-            width: 100%;
+    border-radius:11px;
 
-            border: none;
+    padding:14px;
 
-            border-radius: 11px;
+    font-size:15px;
 
-            padding: 14px;
+    font-weight:bold;
 
-            font-size: 14px;
+    cursor:pointer;
 
-            font-weight: bold;
+    color:white;
 
-            cursor: pointer;
+    background:linear-gradient(135deg,#5865f2,#3d7cff);
 
-            transition: 0.2s;
-        }
+    margin-top:3px;
+}
 
-        button:active {
-            transform: scale(0.98);
-        }
+button:active{
+    transform:scale(.98);
+}
 
-        .discord-button {
-            background: #5865F2;
+.discord-button{
+    background:#5865f2;
+    margin-bottom:10px;
+}
 
-            color: white;
+.logout{
+    background:#18273b;
+    color:#aab8ca;
+}
 
-            margin-bottom: 10px;
-        }
+#message{
+    text-align:center;
 
-        .discord-button:hover {
-            background: #4752c4;
-        }
+    margin-top:17px;
 
-        .register-button {
-            background: #1877f2;
+    font-size:14px;
 
-            color: white;
+    line-height:1.4;
+}
 
-            margin-top: 5px;
-        }
+.success{
+    color:#5ee59b;
+}
 
-        .register-button:hover {
-            background: #0f65d1;
-        }
+.error{
+    color:#ff7272;
+}
 
-        .register-button:disabled {
-            opacity: 0.6;
-
-            cursor: not-allowed;
-        }
-
-        .logout-button {
-            background: transparent;
-
-            color: #8fa9c7;
-
-            border: 1px solid #29496d;
-
-            margin-top: 10px;
-        }
-
-        .logout-button:hover {
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        /* ================================
-           FORM
-        ================================= */
-
-        .divider {
-            height: 1px;
-
-            background: #1d3655;
-
-            margin: 20px 0;
-        }
-
-        .input-group {
-            margin-bottom: 17px;
-        }
-
-        label {
-            display: block;
-
-            font-size: 13px;
-
-            color: #b7c9df;
-
-            margin-bottom: 7px;
-        }
-
-        input {
-            width: 100%;
-
-            padding: 13px 14px;
-
-            border-radius: 11px;
-
-            border: 1px solid #29496d;
-
-            background: #07182e;
-
-            color: white;
-
-            outline: none;
-
-            font-size: 14px;
-        }
-
-        input:focus {
-            border-color: #4285ff;
-
-            box-shadow:
-                0 0 0 2px rgba(66, 133, 255, 0.12);
-        }
-
-        input::placeholder {
-            color: #647b97;
-        }
-
-        /* ================================
-           MESSAGE
-        ================================= */
-
-        .message {
-            display: none;
-
-            padding: 12px;
-
-            border-radius: 10px;
-
-            margin-bottom: 15px;
-
-            font-size: 13px;
-
-            line-height: 1.5;
-        }
-
-        .error {
-            background: rgba(255, 70, 70, 0.10);
-
-            border: 1px solid rgba(255, 70, 70, 0.35);
-
-            color: #ff9b9b;
-        }
-
-        .success {
-            background: rgba(50, 200, 120, 0.10);
-
-            border: 1px solid rgba(50, 200, 120, 0.35);
-
-            color: #7ff0ae;
-        }
-
-        .small-text {
-            text-align: center;
-
-            color: #7188a3;
-
-            font-size: 11px;
-
-            line-height: 1.5;
-
-            margin-top: 17px;
-        }
-
-    </style>
+.loading{
+    color:#9db8dd;
+}
+</style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="card">
 
-    <div class="card">
+    <img src="logo.jpg" class="logo" alt="Logo">
 
-        <!-- LOGO -->
+    <h1>Registrasi Ghost</h1>
 
-        <img
-            src="logo.jpg"
-            class="logo"
-            alt="Ghost Logo"
-        >
+    <div class="subtitle">
+        Lengkapi akun Ghost kamu
+    </div>
 
+    <div class="discord-box">
 
-        <h1>Buat Akun</h1>
-
-
-        <p class="subtitle">
-            Lengkapi data akun untuk menyelesaikan registrasi.
-        </p>
-
-
-        <!-- LOADING -->
-
-        <div
-            id="loading"
-            class="loading"
-        >
-            Memeriksa akun Discord...
+        <div class="discord-name" id="discordName">
+            Memuat akun Discord...
         </div>
 
-
-        <!-- CONTENT -->
-
-        <div
-            id="content"
-            class="hidden"
-        >
-
-            <!-- ============================
-                 DISCORD ACCOUNT
-            ============================= -->
-
-            <div class="discord-box">
-
-                <div class="discord-title">
-                    AKUN DISCORD
-                </div>
-
-                <div
-                    id="discordUser"
-                    class="discord-user"
-                >
-                    -
-                </div>
-
-            </div>
-
-
-            <!-- ============================
-                 DISCORD SERVER BUTTON
-            ============================= -->
-
-            <button
-                id="openDiscordButton"
-                class="discord-button"
-                onclick="openDiscord()"
-            >
-                Buka Discord
-            </button>
-
-
-            <div class="divider"></div>
-
-
-            <!-- MESSAGE -->
-
-            <div
-                id="message"
-                class="message"
-            ></div>
-
-
-            <!-- ============================
-                 REGISTRATION FORM
-            ============================= -->
-
-            <form id="registerForm">
-
-
-                <!-- USERNAME -->
-
-                <div class="input-group">
-
-                    <label for="username">
-                        Username
-                    </label>
-
-                    <input
-                        type="text"
-                        id="username"
-                        placeholder="Masukkan username"
-                        minlength="3"
-                        maxlength="20"
-                        autocomplete="username"
-                        required
-                    >
-
-                </div>
-
-
-                <!-- PASSWORD -->
-
-                <div class="input-group">
-
-                    <label for="password">
-                        Password
-                    </label>
-
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Masukkan password"
-                        minlength="6"
-                        autocomplete="new-password"
-                        required
-                    >
-
-                </div>
-
-
-                <!-- CONFIRM PASSWORD -->
-
-                <div class="input-group">
-
-                    <label for="confirmPassword">
-                        Konfirmasi Password
-                    </label>
-
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        placeholder="Ulangi password"
-                        minlength="6"
-                        autocomplete="new-password"
-                        required
-                    >
-
-                </div>
-
-
-                <!-- REGISTER -->
-
-                <button
-                    type="submit"
-                    id="registerButton"
-                    class="register-button"
-                >
-                    Buat Akun
-                </button>
-
-
-            </form>
-
-
-            <!-- LOGOUT -->
-
-            <button
-                id="logoutButton"
-                class="logout-button"
-                onclick="logout()"
-            >
-                Keluar dari Discord
-            </button>
-
-
-            <p class="small-text">
-                Password dikelola oleh Supabase Auth.
-            </p>
-
-        </div>
+        <div class="discord-id" id="discordId"></div>
 
     </div>
 
-</div>
+    <button class="discord-button" id="discordButton">
+        Buka Discord
+    </button>
 
+    <form id="registerForm">
+
+        <label for="username">
+            Username
+        </label>
+
+        <input
+            id="username"
+            type="text"
+            placeholder="Masukkan username"
+            minlength="3"
+            maxlength="20"
+            required
+        >
+
+        <label for="password">
+            Password
+        </label>
+
+        <input
+            id="password"
+            type="password"
+            placeholder="Masukkan password"
+            minlength="6"
+            required
+        >
+
+        <label for="confirmPassword">
+            Konfirmasi Password
+        </label>
+
+        <input
+            id="confirmPassword"
+            type="password"
+            placeholder="Ulangi password"
+            minlength="6"
+            required
+        >
+
+        <button type="submit">
+            Buat Akun
+        </button>
+
+    </form>
+
+    <button class="logout" id="logout">
+        Keluar
+    </button>
+
+    <div id="message"></div>
+
+</div>
 
 <script>
 
-/*
-==================================================
-SUPABASE CONFIG
-==================================================
-*/
-
 const SUPABASE_URL =
-    "https://PROJECT-KAMU.supabase.co";
+    "https://ptkwoqbkqubxnjacobkm.supabase.co";
 
 const SUPABASE_KEY =
-    "PASTE-PUBLISHABLE-KEY-KAMU";
-
-
-/*
-==================================================
-DISCORD SERVER CONFIG
-==================================================
-*/
+    "sb_publishable_qyC_25w3HLPKnhkPZT4VJg_2RNpyItD";
 
 const DISCORD_SERVER_ID =
     "1547958319346352160";
 
-
 const DISCORD_INVITE =
     "https://discord.gg/BKTBANfWK";
 
-
-/*
-==================================================
-SUPABASE CLIENT
-==================================================
-*/
-
 const supabaseClient =
-    window.supabase.createClient(
+    supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
     );
 
 
-/*
-==================================================
-ELEMENT
-==================================================
-*/
+const discordName =
+    document.getElementById("discordName");
 
-const loading =
-    document.getElementById("loading");
-
-
-const content =
-    document.getElementById("content");
-
-
-const discordUser =
-    document.getElementById("discordUser");
-
-
-const registerForm =
-    document.getElementById("registerForm");
-
-
-const registerButton =
-    document.getElementById("registerButton");
-
+const discordId =
+    document.getElementById("discordId");
 
 const message =
     document.getElementById("message");
 
 
-/*
-==================================================
-MESSAGE
-==================================================
-*/
-
-function showMessage(text, type) {
+function showMessage(text,type){
 
     message.textContent = text;
 
-    message.className =
-        "message " + type;
+    message.className = type || "";
 
-    message.style.display =
-        "block";
 }
 
 
-function hideMessage() {
+async function loadUser(){
 
-    message.style.display =
-        "none";
+    showMessage(
+        "Memeriksa sesi login...",
+        "loading"
+    );
+
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.getSession();
+
+    if(error){
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+        return;
+    }
+
+    const session = data.session;
+
+    if(!session){
+
+        window.location.replace(
+            "./index.html"
+        );
+
+        return;
+    }
+
+    const user = session.user;
+
+    const metadata =
+        user.user_metadata || {};
+
+    const username =
+        metadata.full_name ||
+        metadata.name ||
+        metadata.user_name ||
+        "Pengguna Discord";
+
+    discordName.textContent =
+        username;
+
+    discordId.textContent =
+        "Discord ID: " +
+        (metadata.provider_id || user.id);
+
+    showMessage(
+        "",
+        ""
+    );
 }
 
 
-/*
-==================================================
-CHECK DISCORD SESSION
-==================================================
-*/
+document
+.getElementById("registerForm")
+.addEventListener("submit", async function(e){
 
-async function checkSession() {
+    e.preventDefault();
 
-    try {
+    const username =
+        document
+        .getElementById("username")
+        .value
+        .trim();
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .auth
-                .getSession();
+    const password =
+        document
+        .getElementById("password")
+        .value;
 
-
-        if (error) {
-
-            throw error;
-
-        }
+    const confirmPassword =
+        document
+        .getElementById("confirmPassword")
+        .value;
 
 
-        const session =
-            data.session;
+    if(username.length < 3){
 
-
-        /*
-        BELUM LOGIN
-        */
-
-        if (!session) {
-
-            window.location.href =
-                "./index.html";
-
-            return;
-
-        }
-
-
-        /*
-        USER DISCORD
-        */
-
-        const user =
-            session.user;
-
-
-        const metadata =
-            user.user_metadata || {};
-
-
-        const discordName =
-            metadata.full_name ||
-            metadata.name ||
-            metadata.preferred_username ||
-            metadata.user_name ||
-            user.email ||
-            "Akun Discord";
-
-
-        discordUser.textContent =
-            discordName;
-
-
-        /*
-        TAMPILKAN FORM
-        */
-
-        loading.classList.add(
-            "hidden"
+        showMessage(
+            "Username minimal 3 karakter.",
+            "error"
         );
 
-
-        content.classList.remove(
-            "hidden"
-        );
-
+        return;
     }
 
 
-    catch (error) {
+    if(password.length < 6){
 
-        console.error(error);
+        showMessage(
+            "Password minimal 6 karakter.",
+            "error"
+        );
 
-        loading.textContent =
-            "Gagal memeriksa sesi. Silakan kembali ke halaman login.";
-
+        return;
     }
 
-}
+
+    if(password !== confirmPassword){
+
+        showMessage(
+            "Konfirmasi password tidak sama.",
+            "error"
+        );
+
+        return;
+    }
 
 
-/*
-==================================================
-OPEN DISCORD SERVER
-==================================================
-*/
+    showMessage(
+        "Mendaftarkan akun...",
+        "loading"
+    );
 
-function openDiscord() {
 
-    /*
-    COBA BUKA APLIKASI DISCORD
-    */
+    const {
+        data: sessionData,
+        error: sessionError
+    } =
+        await supabaseClient.auth.getSession();
+
+
+    if(sessionError || !sessionData.session){
+
+        showMessage(
+            "Sesi Discord tidak ditemukan.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const user =
+        sessionData.session.user;
+
+
+    // Cek username
+    const {
+        data: existing,
+        error: checkError
+    } =
+        await supabaseClient
+        .from("profiles")
+        .select("id")
+        .eq("username", username)
+        .maybeSingle();
+
+
+    if(checkError){
+
+        showMessage(
+            "Gagal mengecek username: " +
+            checkError.message,
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(existing && existing.id !== user.id){
+
+        showMessage(
+            "Username sudah digunakan.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    // Simpan password
+    const {
+        error: passwordError
+    } =
+        await supabaseClient.auth.updateUser({
+            password: password
+        });
+
+
+    if(passwordError){
+
+        showMessage(
+            "Gagal menyimpan password: " +
+            passwordError.message,
+            "error"
+        );
+
+        return;
+    }
+
+
+    // Simpan profile
+    const {
+        error: profileError
+    } =
+        await supabaseClient
+        .from("profiles")
+        .upsert({
+            id: user.id,
+            username: username
+        });
+
+
+    if(profileError){
+
+        showMessage(
+            "Gagal menyimpan username: " +
+            profileError.message,
+            "error"
+        );
+
+        return;
+    }
+
+
+    showMessage(
+        "Registrasi berhasil!",
+        "success"
+    );
+
+});
+
+
+document
+.getElementById("logout")
+.addEventListener("click", async () => {
+
+    await supabaseClient.auth.signOut();
+
+    window.location.replace(
+        "./index.html"
+    );
+
+});
+
+
+document
+.getElementById("discordButton")
+.addEventListener("click", () => {
 
     const discordAppURL =
         "discord://discord.com/channels/" +
         DISCORD_SERVER_ID;
 
-
     window.location.href =
         discordAppURL;
 
-
-    /*
-    FALLBACK KE INVITE
-    */
-
-    setTimeout(function() {
+    setTimeout(() => {
 
         window.location.href =
             DISCORD_INVITE;
 
-    }, 1800);
+    },1800);
 
-}
+});
 
 
-/*
-==================================================
-REGISTER
-==================================================
-*/
-
-registerForm.addEventListener(
-    "submit",
-    async function(event) {
-
-        event.preventDefault();
-
-        hideMessage();
-
-
-        /*
-        AMBIL INPUT
-        */
-
-        const username =
-            document
-                .getElementById("username")
-                .value
-                .trim();
-
-
-        const password =
-            document
-                .getElementById("password")
-                .value;
-
-
-        const confirmPassword =
-            document
-                .getElementById("confirmPassword")
-                .value;
-
-
-        /*
-        VALIDASI USERNAME
-        */
-
-        if (username.length < 3) {
-
-            showMessage(
-                "Username minimal 3 karakter.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        if (username.length > 20) {
-
-            showMessage(
-                "Username maksimal 20 karakter.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        /*
-        VALIDASI PASSWORD
-        */
-
-        if (password.length < 6) {
-
-            showMessage(
-                "Password minimal 6 karakter.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        /*
-        CEK PASSWORD
-        */
-
-        if (password !== confirmPassword) {
-
-            showMessage(
-                "Konfirmasi password tidak sama.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        /*
-        BUTTON LOADING
-        */
-
-        registerButton.disabled =
-            true;
-
-
-        registerButton.textContent =
-            "Membuat akun...";
-
-
-        try {
-
-            /*
-            ======================================
-            GET SESSION
-            ======================================
-            */
-
-            const {
-                data: sessionData,
-                error: sessionError
-            } =
-                await supabaseClient
-                    .auth
-                    .getSession();
-
-
-            if (sessionError) {
-
-                throw sessionError;
-
-            }
-
-
-            const session =
-                sessionData.session;
-
-
-            if (!session) {
-
-                throw new Error(
-                    "Sesi Discord sudah tidak tersedia."
-                );
-
-            }
-
-
-            const user =
-                session.user;
-
-
-            /*
-            ======================================
-            CHECK USERNAME
-            ======================================
-            */
-
-            const {
-                data: existingUser,
-                error: checkError
-            } =
-                await supabaseClient
-                    .from("profiles")
-                    .select("id")
-                    .eq("username", username)
-                    .maybeSingle();
-
-
-            if (checkError) {
-
-                throw checkError;
-
-            }
-
-
-            if (existingUser) {
-
-                throw new Error(
-                    "Username tersebut sudah digunakan."
-                );
-
-            }
-
-
-            /*
-            ======================================
-            SET PASSWORD
-            ======================================
-            */
-
-            const {
-                error: passwordError
-            } =
-                await supabaseClient
-                    .auth
-                    .updateUser({
-
-                        password:
-                            password
-
-                    });
-
-
-            if (passwordError) {
-
-                throw passwordError;
-
-            }
-
-
-            /*
-            ======================================
-            SAVE PROFILE
-            ======================================
-            */
-
-            const {
-                error: profileError
-            } =
-                await supabaseClient
-                    .from("profiles")
-                    .upsert({
-
-                        id:
-                            user.id,
-
-                        username:
-                            username
-
-                    });
-
-
-            if (profileError) {
-
-                throw profileError;
-
-            }
-
-
-            /*
-            ======================================
-            SUCCESS
-            ======================================
-            */
-
-            showMessage(
-                "Registrasi berhasil! Akun lu sudah dibuat.",
-                "success"
-            );
-
-
-            registerButton.textContent =
-                "Akun Berhasil Dibuat";
-
-
-            /*
-            DISABLE FORM
-            */
-
-            document
-                .getElementById("username")
-                .disabled = true;
-
-
-            document
-                .getElementById("password")
-                .disabled = true;
-
-
-            document
-                .getElementById("confirmPassword")
-                .disabled = true;
-
-        }
-
-
-        catch (error) {
-
-            console.error(error);
-
-
-            showMessage(
-                error.message ||
-                "Terjadi kesalahan saat membuat akun.",
-                "error"
-            );
-
-
-            registerButton.disabled =
-                false;
-
-
-            registerButton.textContent =
-                "Buat Akun";
-
-        }
-
-    }
-);
-
-
-/*
-==================================================
-LOGOUT
-==================================================
-*/
-
-async function logout() {
-
-    await supabaseClient
-        .auth
-        .signOut();
-
-
-    window.location.href =
-        "./index.html";
-
-}
-
-
-/*
-==================================================
-AUTH STATE
-==================================================
-*/
-
-supabaseClient
-    .auth
-    .onAuthStateChange(
-        function(event, session) {
-
-            if (!session) {
-
-                window.location.href =
-                    "./index.html";
-
-            }
-
-        }
-    );
-
-
-/*
-==================================================
-START
-==================================================
-*/
-
-checkSession();
+loadUser();
 
 </script>
 
