@@ -1,317 +1,246 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Registrasi Ghost</title>
+    <title>Registrasi Ghost</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<style>
-*{
-    box-sizing:border-box;
-}
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
 
-body{
-    margin:0;
-    min-height:100vh;
-    padding:20px;
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background:
+                radial-gradient(circle at top, #123d78 0%, transparent 45%),
+                linear-gradient(135deg, #050b18, #071a33);
+            color: white;
+        }
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+        .container {
+            width: 100%;
+            max-width: 420px;
+            padding: 32px 25px;
+            border-radius: 22px;
+            background: rgba(8, 24, 48, 0.94);
+            border: 1px solid rgba(74, 144, 255, 0.25);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+            text-align: center;
+        }
 
-    font-family:Arial,sans-serif;
-    color:white;
+        .logo {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
 
-    background:
-        radial-gradient(
-            circle at top,
-            rgba(0,140,255,.25),
-            transparent 40%
-        ),
-        linear-gradient(
-            145deg,
-            #020812,
-            #071a2d,
-            #020812
-        );
-}
+        h1 {
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
 
-.card{
-    width:100%;
-    max-width:520px;
+        .subtitle {
+            color: #aebdd3;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 28px;
+        }
 
-    padding:32px 25px;
+        .discord-btn {
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            background: #5865f2;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-    background:rgba(5,18,32,.95);
+        .discord-btn:hover {
+            background: #4752c4;
+            transform: translateY(-1px);
+        }
 
-    border:1px solid rgba(0,160,255,.3);
+        .discord-btn:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
 
-    border-radius:24px;
+        .status {
+            margin-top: 18px;
+            min-height: 20px;
+            color: #9eb5d5;
+            font-size: 13px;
+        }
 
-    box-shadow:
-        0 20px 70px rgba(0,0,0,.6),
-        0 0 30px rgba(0,130,255,.08);
-}
-
-.brand{
-    text-align:center;
-}
-
-.logo{
-    width:110px;
-    height:110px;
-
-    margin:0 auto 20px;
-
-    border-radius:24px;
-
-    overflow:hidden;
-
-    border:2px solid #159fff;
-
-    box-shadow:
-        0 0 30px rgba(0,150,255,.4);
-}
-
-.logo img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-h1{
-    margin:0;
-
-    font-size:32px;
-
-    background:
-        linear-gradient(
-            90deg,
-            white,
-            #59c7ff
-        );
-
-    -webkit-background-clip:text;
-    color:transparent;
-}
-
-.subtitle{
-    color:#91a7bb;
-    margin:10px 0 25px;
-}
-
-.discord{
-    width:100%;
-    height:55px;
-
-    border:0;
-    border-radius:14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #5865f2,
-            #3f4bd8
-        );
-
-    color:white;
-
-    font-size:16px;
-    font-weight:bold;
-
-    cursor:pointer;
-}
-
-.discord:hover{
-    filter:brightness(1.1);
-}
-
-.notice{
-    text-align:center;
-
-    color:#73889c;
-
-    font-size:13px;
-
-    line-height:1.5;
-
-    margin:18px 5px 25px;
-}
-
-.status{
-    display:none;
-
-    margin-top:15px;
-
-    padding:12px;
-
-    border-radius:10px;
-
-    text-align:center;
-
-    font-size:13px;
-}
-
-.error{
-    background:rgba(255,50,50,.1);
-
-    border:1px solid rgba(255,50,50,.3);
-
-    color:#ffaaaa;
-}
-</style>
+        .footer {
+            margin-top: 25px;
+            font-size: 12px;
+            color: #647896;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="card">
+<div class="container">
 
-    <div class="brand">
+    <img src="logo.jpg" class="logo" alt="Logo">
 
-        <div class="logo">
-            <img src="logo.jpg" alt="Ghost Logo">
-        </div>
+    <h1>Registrasi Ghost</h1>
 
-        <h1>
-            Registrasi Ghost
-        </h1>
+    <p class="subtitle">
+        Login menggunakan akun Discord untuk melanjutkan proses registrasi.
+    </p>
 
-        <div class="subtitle">
-            Login dengan Discord
-        </div>
-
-    </div>
-
-
-    <button
-        class="discord"
-        id="discordButton"
-        onclick="loginDiscord()"
-    >
+    <button id="discordLogin" class="discord-btn">
         Login dengan Discord
     </button>
 
+    <div id="status" class="status"></div>
 
-    <p class="notice">
-        Login menggunakan akun Discord
-        untuk melanjutkan registrasi.
-    </p>
-
-
-    <div
-        class="status error"
-        id="error"
-    ></div>
+    <div class="footer">
+        Registrasi Ghost
+    </div>
 
 </div>
 
-
 <script>
+    // ==============================
+    // SUPABASE CONFIG
+    // ==============================
 
-/*
-==================================================
-SUPABASE
-==================================================
+    const SUPABASE_URL =
+        "https://ptkwobkqubxgnjacobkm.supabase.co";
 
-GANTI DENGAN DATA PROJECT SUPABASE LU
-==================================================
-*/
-
-const SUPABASE_URL =
-"https://PROJECT-KAMU.supabase.co";
-
-const SUPABASE_KEY =
-"PASTE-PUBLISHABLE-KEY-KAMU";
+    const SUPABASE_KEY =
+        "sb_publishable_qyC_25w3HLPKnhkPZT4VJg_2RNpyItD";
 
 
-/*
-==================================================
-SUPABASE CLIENT
-==================================================
-*/
+    // ==============================
+    // BUAT CLIENT SUPABASE
+    // ==============================
 
-const supabaseClient =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
-
-
-/*
-==================================================
-LOGIN DISCORD
-==================================================
-*/
-
-async function loginDiscord(){
-
-    const button =
-        document.getElementById(
-            "discordButton"
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
         );
 
 
-    button.disabled = true;
+    // ==============================
+    // ELEMENT
+    // ==============================
 
-    button.textContent =
-        "Membuka Discord...";
+    const loginButton =
+        document.getElementById("discordLogin");
 
-
-    /*
-    Setelah OAuth selesai,
-    Discord/Supabase akan kembali
-    langsung ke registrasi.html
-    */
-
-    const redirectUrl =
-        window.location.origin +
-        "/registrasi-ghost/registrasi.html";
+    const statusText =
+        document.getElementById("status");
 
 
-    const {
-        error
-    } =
-    await supabaseClient.auth.signInWithOAuth({
+    // ==============================
+    // LOGIN DISCORD
+    // ==============================
 
-        provider:"discord",
+    loginButton.addEventListener("click", async () => {
 
-        options:{
+        try {
 
-            redirectTo:
-                redirectUrl
+            loginButton.disabled = true;
+
+            statusText.textContent =
+                "Menghubungkan ke Discord...";
+
+
+            // Halaman setelah OAuth berhasil
+            const redirectUrl =
+                window.location.origin +
+                "/registrasi-ghost/registrasi.html";
+
+
+            const { data, error } =
+                await supabaseClient.auth.signInWithOAuth({
+
+                    provider: "discord",
+
+                    options: {
+                        redirectTo: redirectUrl
+                    }
+
+                });
+
+
+            if (error) {
+
+                console.error(error);
+
+                statusText.textContent =
+                    "Login gagal: " + error.message;
+
+                loginButton.disabled = false;
+
+                return;
+            }
+
+
+            console.log("OAuth dimulai:", data);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            statusText.textContent =
+                "Terjadi kesalahan: " + error.message;
+
+            loginButton.disabled = false;
 
         }
 
     });
 
 
-    if(error){
+    // ==============================
+    // CEK SESSION
+    // ==============================
 
-        button.disabled = false;
+    async function checkSession() {
 
-        button.textContent =
-            "Login dengan Discord";
-
-
-        const errorBox =
-            document.getElementById(
-                "error"
-            );
+        const {
+            data: { session }
+        } = await supabaseClient.auth.getSession();
 
 
-        errorBox.textContent =
-            error.message;
+        if (session) {
 
+            // Kalau sudah login,
+            // langsung ke halaman registrasi
 
-        errorBox.style.display =
-            "block";
+            window.location.href =
+                "/registrasi-ghost/registrasi.html";
+        }
 
     }
 
-}
+
+    checkSession();
 
 </script>
 
