@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Registrasi Ghost</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    padding:20px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-family:Arial, sans-serif;
+    color:white;
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(0,140,255,.25),
+            transparent 40%
+        ),
+        linear-gradient(
+            145deg,
+            #020812,
+            #071a2d,
+            #020812
+        );
+}
+
+.card{
+    width:100%;
+    max-width:520px;
+
+    padding:32px 25px;
+
+    background:rgba(5,18,32,.95);
+
+    border:1px solid rgba(0,160,255,.3);
+
+    border-radius:24px;
+
+    box-shadow:
+        0 20px 70px rgba(0,0,0,.6),
+        0 0 30px rgba(0,130,255,.08);
+}
+
+.brand{
+    text-align:center;
+}
+
+.logo{
+    width:110px;
+    height:110px;
+
+    margin:0 auto 20px;
+
+    border-radius:24px;
+
+    overflow:hidden;
+
+    border:2px solid #159fff;
+
+    box-shadow:
+        0 0 30px rgba(0,150,255,.4);
+}
+
+.logo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+h1{
+    margin:0;
+
+    font-size:32px;
+
+    background:
+        linear-gradient(
+            90deg,
+            white,
+            #59c7ff
+        );
+
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.subtitle{
+    color:#91a7bb;
+    margin:10px 0 25px;
+}
+
+.discord{
+    width:100%;
+    height:55px;
+
+    border:0;
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #5865f2,
+            #3f4bd8
+        );
+
+    color:white;
+
+    font-size:16px;
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+.discord:hover{
+    filter:brightness(1.1);
+}
+
+.notice{
+    text-align:center;
+
+    color:#73889c;
+
+    font-size:13px;
+
+    line-height:1.5;
+
+    margin:18px 5px 25px;
+}
+
+.user{
+    display:none;
+
+    padding:13px;
+
+    border-radius:12px;
+
+    background:rgba(0,150,255,.08);
+
+    border:1px solid rgba(0,150,255,.2);
+
+    color:#a8dcff;
+
+    margin-bottom:20px;
+}
+
+.register{
+    display:none;
+}
+
+label{
+    display:block;
+
+    margin-top:18px;
+    margin-bottom:8px;
+
+    color:#a9e1ff;
+
+    font-size:13px;
+
+    font-weight:bold;
+
+    letter-spacing:1px;
+}
+
+input{
+    width:100%;
+    height:55px;
+
+    padding:0 15px;
+
+    border-radius:13px;
+
+    border:1px solid rgba(80,170,230,.25);
+
+    background:#061321;
+
+    color:white;
+
+    outline:none;
+
+    font-size:16px;
+}
+
+input:focus{
+    border-color:#12aaff;
+
+    box-shadow:
+        0 0 0 3px rgba(18,170,255,.1);
+}
+
+input::placeholder{
+    color:#506579;
+}
+
+.create{
+    width:100%;
+    height:55px;
+
+    margin-top:23px;
+
+    border:0;
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            100deg,
+            #126ed1,
+            #16aef4
+        );
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+.create:disabled{
+    opacity:.5;
+}
+
+.status{
+    display:none;
+
+    margin-top:15px;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    text-align:center;
+
+    font-size:13px;
+}
+
+.success{
+    background:rgba(0,200,130,.1);
+    border:1px solid rgba(0,200,130,.3);
+    color:#8ff0c5;
+}
+
+.error{
+    background:rgba(255,50,50,.1);
+    border:1px solid rgba(255,50,50,.3);
+    color:#ffaaaa;
+}
+
+footer{
+    margin-top:25px;
+
+    text-align:center;
+
+    color:#62778b;
+
+    font-size:11px;
+
+    line-height:1.5;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="brand">
+
+        <div class="logo">
+            <img src="logo.jpg" alt="Ghost Logo">
+        </div>
+
+        <h1>
+            Registrasi Ghost
+        </h1>
+
+        <div
+            class="subtitle"
+            id="subtitle"
+        >
+            Login dengan Discord
+        </div>
+
+    </div>
+
+
+    <!-- LOGIN DISCORD -->
+
+    <button
+        class="discord"
+        id="discordButton"
+        onclick="loginDiscord()"
+    >
+        Login dengan Discord
+    </button>
+
+
+    <p
+        class="notice"
+        id="notice"
+    >
+        Login menggunakan akun Discord
+        untuk melanjutkan registrasi.
+    </p>
+
+
+    <!-- USER DISCORD -->
+
+    <div
+        class="user"
+        id="userBox"
+    ></div>
+
+
+    <!-- FORM REGISTRASI -->
+
+    <div
+        class="register"
+        id="register"
+    >
+
+        <label>
+            NAMA PENGGUNA
+        </label>
+
+        <input
+            id="username"
+            type="text"
+            maxlength="24"
+            placeholder="Masukkan nama pengguna"
+        >
+
+
+        <label>
+            KATA SANDI
+        </label>
+
+        <input
+            id="password"
+            type="password"
+            minlength="10"
+            placeholder="Minimal 10 karakter"
+        >
+
+
+        <label>
+            KONFIRMASI KATA SANDI
+        </label>
+
+        <input
+            id="confirm"
+            type="password"
+            minlength="10"
+            placeholder="Masukkan kembali kata sandi"
+        >
+
+
+        <button
+            class="create"
+            id="createButton"
+            onclick="createAccount()"
+        >
+            Buat Akun
+        </button>
+
+
+        <div
+            class="status success"
+            id="success"
+        ></div>
+
+
+        <div
+            class="status error"
+            id="error"
+        ></div>
+
+    </div>
+
+
+    <footer>
+        Registrasi Ghost
+    </footer>
+
+</div>
+
+
+<script>
+
+/*
+==================================================
+SUPABASE
+==================================================
+
+GANTI DUA BAGIAN INI NANTI
+==================================================
+*/
+
+const SUPABASE_URL =
+"https://PROJECT-KAMU.supabase.co";
+
+const SUPABASE_KEY =
+"PASTE-PUBLISHABLE-KEY-KAMU";
+
+
+/*
+==================================================
+SUPABASE CLIENT
+==================================================
+*/
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/*
+==================================================
+LOGIN DISCORD
+==================================================
+*/
+
+async function loginDiscord(){
+
+    const {
+        error
+    } =
+    await supabaseClient.auth.signInWithOAuth({
+
+        provider:"discord",
+
+        options:{
+
+            redirectTo:
+            window.location.origin +
+            window.location.pathname
+
+        }
+
+    });
+
+
+    if(error){
+
+        showError(
+            error.message
+        );
+
+    }
+
+}
+
+
+/*
+==================================================
+CEK LOGIN
+==================================================
+*/
+
+async function checkLogin(){
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient.auth.getSession();
+
+
+    if(error){
+
+        showError(
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    if(data.session){
+
+        showRegister(
+            data.session.user
+        );
+
+    }
+
+}
+
+
+/*
+==================================================
+TAMPILKAN FORM
+==================================================
+*/
+
+function showRegister(user){
+
+    document
+        .getElementById("discordButton")
+        .style.display="none";
+
+
+    document
+        .getElementById("notice")
+        .style.display="none";
+
+
+    document
+        .getElementById("register")
+        .style.display="block";
+
+
+    document
+        .getElementById("subtitle")
+        .textContent=
+        "Lengkapi akun kamu";
+
+
+    const name =
+        user.user_metadata?.global_name ||
+        user.user_metadata?.full_name ||
+        user.user_metadata?.name ||
+        "Discord User";
+
+
+    const box =
+        document.getElementById("userBox");
+
+
+    box.textContent =
+        "Login sebagai: " + name;
+
+
+    box.style.display="block";
+
+}
+
+
+/*
+==================================================
+BUAT AKUN
+==================================================
+*/
+
+async function createAccount(){
+
+    const username =
+        document
+        .getElementById("username")
+        .value
+        .trim();
+
+
+    const password =
+        document
+        .getElementById("password")
+        .value;
+
+
+    const confirm =
+        document
+        .getElementById("confirm")
+        .value;
+
+
+    const button =
+        document
+        .getElementById("createButton");
+
+
+    if(username.length < 3){
+
+        showError(
+            "Username minimal 3 karakter."
+        );
+
+        return;
+
+    }
+
+
+    if(password.length < 10){
+
+        showError(
+            "Password minimal 10 karakter."
+        );
+
+        return;
+
+    }
+
+
+    if(password !== confirm){
+
+        showError(
+            "Konfirmasi password tidak sama."
+        );
+
+        return;
+
+    }
+
+
+    button.disabled=true;
+
+    button.textContent=
+        "Menyimpan...";
+
+
+    /*
+    AMBIL USER DISCORD
+    */
+
+    const {
+        data:{user},
+        error:userError
+    } =
+    await supabaseClient.auth.getUser();
+
+
+    if(userError || !user){
+
+        showError(
+            "Session Discord tidak ditemukan."
+        );
+
+        button.disabled=false;
+
+        button.textContent=
+            "Buat Akun";
+
+        return;
+
+    }
+
+
+    /*
+    SIMPAN PASSWORD
+    */
+
+    const {
+        error:passwordError
+    } =
+    await supabaseClient.auth.updateUser({
+
+        password:password
+
+    });
+
+
+    if(passwordError){
+
+        showError(
+            passwordError.message
+        );
+
+        button.disabled=false;
+
+        button.textContent=
+            "Buat Akun";
+
+        return;
+
+    }
+
+
+    /*
+    SIMPAN USERNAME
+    */
+
+    const {
+        error:profileError
+    } =
+    await supabaseClient
+    .from("profiles")
+    .upsert({
+
+        id:user.id,
+
+        username:username
+
+    });
+
+
+    if(profileError){
+
+        showError(
+            profileError.message
+        );
+
+        button.disabled=false;
+
+        button.textContent=
+            "Buat Akun";
+
+        return;
+
+    }
+
+
+    showSuccess(
+        "Akun berhasil dibuat!"
+    );
+
+
+    button.textContent=
+        "Akun Dibuat";
+
+}
+
+
+/*
+==================================================
+ERROR
+==================================================
+*/
+
+function showError(message){
+
+    const error =
+        document.getElementById("error");
+
+
+    error.textContent=
+        message;
+
+
+    error.style.display=
+        "block";
+
+
+    document
+        .getElementById("success")
+        .style.display=
+        "none";
+
+}
+
+
+/*
+==================================================
+SUCCESS
+==================================================
+*/
+
+function showSuccess(message){
+
+    const success =
+        document.getElementById("success");
+
+
+    success.textContent=
+        message;
+
+
+    success.style.display=
+        "block";
+
+
+    document
+        .getElementById("error")
+        .style.display=
+        "none";
+
+}
+
+
+/*
+==================================================
+MULAI
+==================================================
+*/
+
+checkLogin();
+
+</script>
+
+</body>
+</html>
